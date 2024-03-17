@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-
 """A preprocessor/template engine."""
-
 
 import argparse
 import importlib
@@ -13,17 +11,19 @@ import types
 
 
 def substitute(input_str: str, tag_open: str, tag_close: str, environment: dict) -> str:
-    """Do the actual text substitution."""
+    """Substitute the Python code between open and close tag in input by the output of the Python code (returned string
+    or stdout). Open/close tag characters in the input text that are escaped with a backslash, are not treated as
+    open/close tags. The executed Python code can be given an environment."""
 
     tag_open_esc = re.escape(tag_open)
     tag_close_esc = re.escape(tag_close)
     output_str = input_str
 
     # regex breakdown:
-    #   (?<!\\\)        - lookbehind assertion, matches if the current position in the string is not preceeded by a backslash
+    #   (?<!\\\)        - lookbehind assertion, matches if current position in string is not preceeded by a backslash
     #   {tag_open_esc}  - f-string substitution for escaped open tag
     #   (.*?)           - group that non-greedily matches the actual python code between open and close tag
-    #   (?<!\\\)        - lookbehind assertion, matches if the current position in the string is not preceeded by a backslash
+    #   (?<!\\\)        - lookbehind assertion, matches if current position in string is not preceeded by a backslash
     #   {tag_close_esc} - f-string substitution for escaped open tag
     for match in re.finditer(f"(?<!\\\){tag_open_esc}(.*?)(?<!\\\){tag_close_esc}", input_str, re.DOTALL):
         stdout_original = sys.stdout
@@ -104,11 +104,16 @@ def _parse_arguments() -> dict:
         Reads FILE, evaluates Python code embedded between OPENTAG and CLOSETAG and substitutes it with its result or,
         if it's not a string, with its stdout. All embedded code must evaluate to string or produce stdout. Additional
         Python code can be defined in USERMODULE. WARNING: uses eval(), don't use on untrustworthy input.""")
-    parser.add_argument("-u", "--user-module", metavar="USERMODULE", help="python module containing user python code, omit .py extension")
-    parser.add_argument("-e", "--environment", default="{}", help="extra environment")
-    parser.add_argument("-o", "--opentag", help="character(s) used as start tag for embedded python code (default: opentag from USERMODULE, '{{' if not defined)")
-    parser.add_argument("-c", "--closetag", help="character(s) used as close tag for embedded python code (default: closetag from USERMODULE, '}}' if not defined)")
-    parser.add_argument("file", nargs="?", metavar="FILE", help="input file. if no FILE is given, read from stdin.")
+    parser.add_argument("-u", "--user-module", metavar="USERMODULE",
+                        help="python module containing user python code, omit .py extension")
+    parser.add_argument("-e", "--environment", default="{}",
+                        help="extra environment")
+    parser.add_argument("-o", "--opentag",
+                        help="character(s) used as start tag for embedded python code (default: opentag from USERMODULE, '{{' if not defined)")
+    parser.add_argument("-c", "--closetag",
+                        help="character(s) used as close tag for embedded python code (default: closetag from USERMODULE, '}}' if not defined)")
+    parser.add_argument("file", nargs="?", metavar="FILE",
+                        help="input file. if no FILE is given, read from stdin.")
 
     return vars(parser.parse_args())
 
@@ -122,4 +127,3 @@ if __name__ == "__main__":
     opentag, closetag = _get_delimiter_tags(args, user_module)
 
     run(input_filename, user_module, extra_env_dict, opentag, closetag)
-
