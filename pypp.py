@@ -12,7 +12,7 @@ import sys
 import types
 
 
-def substitute(input_str: str, tag_open: str, tag_close: str, globals: dict) -> str:
+def substitute(input_str: str, tag_open: str, tag_close: str, environment: dict) -> str:
     """Do the actual text substitution."""
 
     tag_open_esc = re.escape(tag_open)
@@ -31,7 +31,7 @@ def substitute(input_str: str, tag_open: str, tag_close: str, globals: dict) -> 
 
         try:
             code = match.group(1)
-            code_result = eval(code, globals)
+            code_result = eval(code, environment)
 
             if not isinstance(code_result, str):
                 code_result = stdout_captured.getvalue()
