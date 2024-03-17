@@ -19,6 +19,12 @@ def substitute(input_str: str, tag_open: str, tag_close: str, globals: dict) -> 
     tag_close_esc = re.escape(tag_close)
     output_str = input_str
 
+    # regex breakdown:
+    #   (?<!\\\)        - lookbehind assertion, matches if the current position in the string is not preceeded by a backslash
+    #   {tag_open_esc}  - f-string substitution for escaped open tag
+    #   (.*?)           - group that non-greedily matches the actual python code between open and close tag
+    #   (?<!\\\)        - lookbehind assertion, matches if the current position in the string is not preceeded by a backslash
+    #   {tag_close_esc} - f-string substitution for escaped open tag
     for match in re.finditer(f"(?<!\\\){tag_open_esc}(.*?)(?<!\\\){tag_close_esc}", input_str, re.DOTALL):
         stdout_original = sys.stdout
         sys.stdout = stdout_captured = io.StringIO()
