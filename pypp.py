@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 
+
+"""A preprocessor/template engine."""
+
+
 import argparse
 import importlib
 import io
@@ -112,3 +116,4 @@ if __name__ == "__main__":
     opentag, closetag = _get_delimiter_tags(args, user_module)
 
     run(input_filename, user_module, extra_env_dict, opentag, closetag)
+
