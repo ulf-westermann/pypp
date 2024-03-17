@@ -48,8 +48,8 @@ def substitute(input_str: str, tag_open: str, tag_close: str, environment: dict)
     return output_str
 
 
-def run(input_filename: str | None, user_module: types.ModuleType | None, extra_env_dict: dict, opentag: str, closetag: str) -> None:
-    """Main function. Figure out configuration, read in file contents, execute substitution and print result."""
+def run(input_filename: str|None, user_module: types.ModuleType|None, extra_env_dict: dict, opentag: str, closetag: str) -> None:
+    """Figure out configuration, read in file contents, execute actual substitution and print result."""
 
     # read input text
     if input_filename is None:
@@ -76,7 +76,7 @@ def run(input_filename: str | None, user_module: types.ModuleType | None, extra_
             raise Exception("terminate failed")
 
 
-def _get_delimiter_tags(args: dict, user_module: types.ModuleType | None) -> tuple[str, str]:
+def _get_delimiter_tags(args: dict, user_module: types.ModuleType|None) -> tuple[str, str]:
     """Get delimiter tags. There are 2 possible sources: command argument and opts module. Command line overrides
        opts module. If not defined by these 2 sources, the default is applied (`{{` and `}}`)."""
 
