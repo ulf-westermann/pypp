@@ -25,4 +25,4 @@ Requires Python > 3.7.
 Reads FILE, evaluates Python code embedded between OPENTAG and CLOSETAG and substitutes it with its result or, if it's
 not a string, with its stdout. All embedded code must evaluate to string or produce stdout. Additional Python code can be defined in USERMODULE.
 
-WARNING: uses eval(), don't use on untrustworthy input.
+WARNING: Uses eval(), don't use on untrustworthy input.
