@@ -1,6 +1,6 @@
 # pypp
 
-A preprocessor/template engine that uses Python.
+A preprocessor/template engine that uses embedded Python.
 
 Requires Python > 3.7.
 
